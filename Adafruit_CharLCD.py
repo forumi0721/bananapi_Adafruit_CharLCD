@@ -197,14 +197,30 @@ class Adafruit_CharLCD(object):
 
     def message(self, text):
         """ Send string to LCD. Newline wraps to second line"""
+        line = 1
         for char in text:
             if char == '\n':
-                self.write4bits(0xC0)  # next line
+                line = line + 1
+                if line == 2:
+                    self.write4bits(0xC0) # 2nd line
+                elif line == 3:
+                    self.write4bits(0x94) # 3rd line
+                elif line == 4:
+                    self.write4bits(0xD4) # 4th line
             else:
                 self.write4bits(ord(char), True)
+
+            #if char == '\2':
+            #    self.write4bits(0xC0) # 2nd line
+            #elif char == '\3':
+            #    self.write4bits(0x94) # 3rd line
+            #elif char == '\4':
+            #    self.write4bits(0xD4) # 4th line
+            #else:
+            #    self.write4bits(ord(char), True)
 
 
 if __name__ == '__main__':
     lcd = Adafruit_CharLCD()
     lcd.clear()
-    lcd.message(" Banana Pi\n     by ALLNET")
+    lcd.message(" Banana Pi\n     by forumi0721\n Line 3\n Line 4")
